@@ -1,6 +1,5 @@
 #include "univer.h"
 
-#define FILENAME "students.bin"
 #define INIT_SIZE 5
 
 void showMenu();
@@ -12,13 +11,18 @@ int main() {
     printf("    БАЗА ДАННЫХ ПОЛИТЕХА\n");
     printf("\n");
     
+    char filename[100];
+    printf("Введите имя файла базы данных: ");
+    fgets(filename, sizeof(filename), stdin);
+    filename[strcspn(filename, "\n")] = 0;
+    
     struct SmartArray* database = createArray(INIT_SIZE);
     if (database == NULL) {
         printf("Ошибка создания базы данных!\n");
         return 1;
     }
     
-    if (loadFromFile(database, FILENAME)) {
+    if (loadFromFile(database, filename)) {
         printf("База данных загружена из файла\n");
         printf("Загружено записей: %d\n", database->size);
     } else {
@@ -88,14 +92,14 @@ int main() {
                 break;
                 
             case 7:
-                if (saveToFile(database, FILENAME)) {
+                if (saveToFile(database, filename)) {
                     printf("Данные сохранены в файл\n");
                 }
                 break;
                 
             case 0:
                 printf("\nВыход из программы...\n");
-                saveToFile(database, FILENAME);
+                saveToFile(database, filename);
                 printf("Всего записей в базе: %d\n", database->size);
                 break;
                 
